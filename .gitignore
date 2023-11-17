@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /todos
 **/.DS_Store
+_ide_helper.php
