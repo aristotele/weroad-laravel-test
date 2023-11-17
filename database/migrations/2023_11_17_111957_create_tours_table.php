@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tours', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->foreignId('travelId')->constrained('travels')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('name');
+            $table->date('startingDate');
+            $table->date('endingDate');
+            $table->unsignedInteger('price');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tours');
     }
 };
