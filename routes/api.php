@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\TravelController;
+use App\Http\Controllers\Api\V1\TravelTourController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'v1'], function () {
+Route::group([
+    'prefix' => 'v1',
+    'as' => 'api.v1.'
+], function () {
     Route::get('/travels', [TravelController::class, 'index'])->name('travels.index');
+
+    Route::get('/travels/{travelSlug}/tours', [TravelTourController::class, 'index'])->name('travels.tours.index');
 });

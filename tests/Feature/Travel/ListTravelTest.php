@@ -12,7 +12,9 @@ test('it returns a list of public travels', function () {
 
     // When hit the endpoint
     // Then a paginate list of only public Tours are returned
-    getJson('/api/v1/travels')
+    getJson(
+        route('api.v1.travels.index')
+    )
         ->assertOk()
         ->assertJsonCount(2, 'data')
         ->assertJson([
