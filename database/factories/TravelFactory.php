@@ -34,4 +34,22 @@ class TravelFactory extends Factory
             ]),
         ];
     }
+
+    public function public(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'isPublic' => true,
+            ];
+        });
+    }
+
+    public function private(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'isPublic' => false,
+            ];
+        });
+    }
 }
