@@ -22,4 +22,9 @@ class Travel extends Model
     {
         return $this->hasMany(Tour::class, 'travelId', 'id');
     }
+
+    public function getNumberOfNightsAttribute()
+    {
+        return $this->numberOfDays - 1;
+    }
 }

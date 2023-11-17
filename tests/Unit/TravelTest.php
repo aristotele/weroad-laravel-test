@@ -16,11 +16,15 @@ test('it may have multiple tours associated in different period of time', functi
             'travelId' => $travel->id,
         ]);
 
-    dd($travel->toArray(), $travel->tours->toArray());
-
     tap($travel->tours, function ($tours) {
         assertEquals(3, count($tours));
         assertInstanceOf(Collection::class, $tours);
         assertInstanceOf(Tour::class, $tours->first());
     });
+});
+
+test('it can determine its number of nights', function () {
+    $travel = Travel::factory()->create(['numberOfDays' => 8]);
+
+    assertEquals(7, $travel->numberOfNights);
 });
