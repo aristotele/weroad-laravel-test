@@ -29,27 +29,28 @@ class TourFactory extends Factory
         ];
     }
 
-    public function configure(): static
-    {
-        return $this->afterCreating(function (Tour $tour) {
-            // ensure that each dummy tour has the same numberOfDays specified in the travel
-            $numberOfDays = $tour->travel->numberOfDays;
+    // public function configure(): static
+    // {
+    //     return $this->afterCreating(function (Tour $tour) {
+    //         dd('ehi');
+    //         // ensure that each dummy tour has the same numberOfDays specified in the travel
+    //         $numberOfDays = $tour->travel->numberOfDays;
 
-            $baseStartingRandomMonths = rand(1, 5);
-            $baseStartingRandomDays = rand(1, 15);
+    //         $baseStartingRandomMonths = rand(1, 5);
+    //         $baseStartingRandomDays = rand(1, 15);
 
-            $startingDate = now()
-                ->toImmutable()
-                ->addMonth($baseStartingRandomMonths)
-                ->addDays($baseStartingRandomDays);
+    //         $startingDate = now()
+    //             ->toImmutable()
+    //             ->addMonth($baseStartingRandomMonths)
+    //             ->addDays($baseStartingRandomDays);
 
-            $endingDate = $startingDate->addDays($numberOfDays);
+    //         $endingDate = $startingDate->addDays($numberOfDays);
 
-            $tour->update([
-                'name' => 'ITJOR' . $startingDate->format('Ymd'),
-                'startingDate' => $startingDate->toDateString(),
-                'endingDate' => $endingDate->toDateString(),
-            ]);
-        });
-    }
+    //         $tour->update([
+    //             'name' => 'ITJOR' . $startingDate->format('Ymd'),
+    //             'startingDate' => $startingDate->toDateString(),
+    //             'endingDate' => $endingDate->toDateString(),
+    //         ]);
+    //     });
+    // }
 }

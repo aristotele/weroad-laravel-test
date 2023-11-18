@@ -16,8 +16,25 @@ class TravelTourController extends Controller
     public function index($travelSlug)
     {
         $travelTours = Tour::query()
-            ->whereRelation('travel', 'slug', $travelSlug)
-            ->paginate();
+            ->whereRelation('travel', 'slug', $travelSlug);
+
+        if (request()->has('priceFrom')) {
+            $travelTours->where('price', '>=', request()->query('priceFrom'));
+        }
+
+        if (request()->has('priceTo')) {
+            $travelTours->where('price', '<=', request()->query('priceTo'));
+        }
+
+        if (request()->has('dateFrom')) {
+            $travelTours->where('startingDate', '>=', request()->query('dateFrom'));
+        }
+
+        if (request()->has('dateTo')) {
+            $travelTours->where('startingDate', '<=', request()->query('dateTo'));
+        }
+
+        $travelTours = $travelTours->paginate();
 
         return response()->json(
             $travelTours,
