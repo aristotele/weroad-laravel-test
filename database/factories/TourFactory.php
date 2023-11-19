@@ -22,7 +22,8 @@ class TourFactory extends Factory
             'travelId' => function () {
                 return Travel::factory()->create()->id;
             },
-            'name' => 'overridden-later',
+            // 'name' => 'overridden-later',
+            'name' => $this->faker->sentence(6),
             'startingDate' => now()->toDateString(),
             'endingDate' => now()->toDateString(),
             'price' => rand((500 * 10), (3000 * 10)),

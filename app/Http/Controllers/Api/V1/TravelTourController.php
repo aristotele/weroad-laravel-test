@@ -7,6 +7,8 @@ use App\Models\Tour;
 use App\Models\Travel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
+use Validator;
 
 class TravelTourController extends Controller
 {
@@ -15,6 +17,21 @@ class TravelTourController extends Controller
      */
     public function index($travelSlug)
     {
+        // validate
+        $validator = Validator::make(request()->all(), [
+            'priceFrom' => ['integer'],
+            'priceTo' => ['integer'],
+            'dateFrom' => ['date'],
+            'dateTo' => ['date'],
+            'sortField' => Rule::in(['price', 'date']),
+            'sortDirection' => Rule::in(['asc', 'desc']),
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()], 422);
+        }
+
+        // execute
         $travelTours = Tour::query()
             ->whereRelation('travel', 'slug', $travelSlug);
 
@@ -34,10 +51,28 @@ class TravelTourController extends Controller
             $travelTours->where('startingDate', '<=', request()->query('dateTo'));
         }
 
-        $travelTours = $travelTours->paginate();
+        if (request()->has('sortField')) {
+            $sortField = request()->query('sortField');
+            $sortDirection = request()->query('sortDirection') ?? 'asc';
 
+            $map = [
+                'price' => 'price',
+                'date' => 'startingDate',
+            ];
+            $dbField = $map[$sortField];
+
+            $travelTours->orderBy($dbField, $sortDirection);
+        }
+
+        // apply date sorting if not already specified in the request
+        if (request()->query('sortField') !== 'date') {
+            logger(request()->query('sortField'));
+            $travelTours->orderBy('startingDate', 'asc');
+        }
+
+        // return
         return response()->json(
-            $travelTours,
+            $travelTours->paginate(),
             Response::HTTP_OK
         );
     }
