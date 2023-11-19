@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\V1\TravelController;
 use App\Http\Controllers\Api\V1\TravelTourController;
 
@@ -28,8 +29,13 @@ Route::group([
     Route::get('/travels', [TravelController::class, 'index'])->name('travels.index');
     Route::get('/travels/{travelSlug}/tours', [TravelTourController::class, 'index'])->name('travels.tours.index');
 
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+
+
     // Private routes
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/travels', [TravelController::class, 'store'])->name('travels.store');
+
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
     });
 });
