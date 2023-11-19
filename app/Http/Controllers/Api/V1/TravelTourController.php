@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TourResource;
 use App\Http\Resources\TourResourceCollection;
 use App\Models\Tour;
+use App\Models\Travel;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Validator;
 
@@ -71,5 +74,33 @@ class TravelTourController extends Controller
 
         // return
         return new TourResourceCollection($travelTours->paginate());
+    }
+
+    public function store($travelId)
+    {
+        // authorize
+        if (request()->user()->cannot('create', Tour::class)) {
+            return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+        }
+
+        // validate
+        $validated = request()->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'startingDate' => ['required', 'date', 'after:tomorrow'],
+            'endingDate' => ['required', 'date', 'after:startingDate'],
+            'price' => ['required', 'integer'],
+        ]);
+
+        $travel = Travel::findOrFail($travelId);
+        $validated['price'] = $validated['price'] * 100;
+
+        // save
+        $tour = $travel->tours()->create($validated);
+
+        // response
+        return response()->json(
+            new TourResource($tour),
+            Response::HTTP_CREATED,
+        );
     }
 }

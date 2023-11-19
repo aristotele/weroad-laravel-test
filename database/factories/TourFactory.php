@@ -26,7 +26,7 @@ class TourFactory extends Factory
             'name' => $this->faker->sentence(6),
             'startingDate' => now()->toDateString(),
             'endingDate' => now()->toDateString(),
-            'price' => rand((500 * 10), (3000 * 10)),
+            'price' => rand(500, 3000) * 100,
         ];
     }
 
