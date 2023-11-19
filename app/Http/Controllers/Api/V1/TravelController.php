@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TravelResourceCollection;
 use App\Models\Travel;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class TravelController extends Controller
 {
@@ -14,12 +14,9 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $publicTravels = Travel::query()->public()->paginate();
+        $publicTravels = Travel::query()->public();
 
-        return response()->json(
-            $publicTravels,
-            Response::HTTP_OK
-        );
+        return new TravelResourceCollection($publicTravels->paginate());
     }
 
     /**

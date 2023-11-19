@@ -33,19 +33,23 @@ test('it returns a list of tours for the given travel', function () {
     )
         ->assertOk()
         ->assertJsonStructure([
+            'data',
+            'links',
+            'meta',
+        ])
+        ->assertJsonStructure([
             'data' => [
                 '*' => [
                     "id",
-                    "travelId",
+                    "travel",
                     "name",
                     "startingDate",
                     "endingDate",
                     "price",
-                    "created_at",
-                    "updated_at",
                 ]
             ]
         ]);
+
 
     $data = $response->json('data');
 
@@ -143,9 +147,12 @@ test('it can filters tour related to a travel based on date criteria', function 
         $expectedData[] = $travelTours->where('startingDate', $date)->first()->toArray();
     }
 
-    // Then only the related Tours are returned
+    // Than the expected order of startingDate(s) matches the one of the response given.
     assertCount(count($matchingStartingDates), $data);
-    assertEquals($expectedData, $data);
+    assertEquals(
+        collect($expectedData)->pluck('startingDate')->all(),
+        collect($data)->pluck('startingDate')->all(),
+    );
 })->with([
     'dateFrom' => [
         'queryString' => [
@@ -190,7 +197,6 @@ test('it allows asc and desc sorting by price ', function ($queryString, $matchi
         ->create();
 
     // When hit the endpoint
-    // Then only the related Tours are returned
     $response = getJson(
         route('api.v1.travels.tours.index', [
             'travelSlug' => $travel->slug,
@@ -198,17 +204,19 @@ test('it allows asc and desc sorting by price ', function ($queryString, $matchi
         ])
     )->assertOk();
 
+    $travelTours = $travel->tours;
     $data = $response->json('data');
+    $expectedData = [];
 
+    foreach ($matchingPrices as $price) {
+        $expectedData[] = $travelTours->where('price', $price)->first()->toArray();
+    }
+
+    // Then travel's related tours sorted by the given price criteria are returned.
     assertCount(count($matchingPrices), $data);
     assertEquals(
-        [
-            Tour::where('price', $matchingPrices[0])->first()->toArray(),
-            Tour::where('price', $matchingPrices[1])->first()->toArray(),
-            Tour::where('price', $matchingPrices[2])->first()->toArray(),
-            Tour::where('price', $matchingPrices[3])->first()->toArray(),
-        ],
-        $data,
+        collect($expectedData)->pluck('price')->all(),
+        collect($data)->pluck('price')->map(fn ($formattedPrice) => $formattedPrice * 100)->all(), // compare prices in DB format (cents)
     );
 })->with([
     'price asc' => [

@@ -3,6 +3,7 @@
 use App\Models\Travel;
 
 use function Pest\Laravel\getJson;
+use function PHPUnit\Framework\assertEquals;
 
 test('it returns a list of public travels', function () {
     // Given some Tours both public and private
@@ -12,30 +13,33 @@ test('it returns a list of public travels', function () {
 
     // When hit the endpoint
     // Then a paginate list of only public Tours are returned
-    getJson(
+    $response = getJson(
         route('api.v1.travels.index')
     )
         ->assertOk()
-        ->assertJsonCount(2, 'data')
-        ->assertJson([
-            'data' => [
-                $publicTravels[0]->toArray(),
-                $publicTravels[1]->toArray(),
-            ],
+        ->assertJsonStructure([
+            'data',
+            'links',
+            'meta',
         ])
+        ->assertJsonCount(2, 'data')
         ->assertJsonStructure([
             'data' => [
                 '*' => [
                     "id",
-                    "isPublic",
                     "slug",
                     "name",
                     "description",
                     "numberOfDays",
                     "moods",
-                    "created_at",
-                    "updated_at",
                 ]
             ]
         ]);
+
+    $data = $response->json('data');
+
+    assertEquals(
+        $publicTravels->pluck('id')->sort()->all(),
+        collect($data)->pluck('id')->sort()->all(),
+    );
 });

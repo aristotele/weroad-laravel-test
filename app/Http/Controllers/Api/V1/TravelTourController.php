@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TourResourceCollection;
 use App\Models\Tour;
-use App\Models\Travel;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Validator;
 
@@ -33,6 +31,7 @@ class TravelTourController extends Controller
 
         // execute
         $travelTours = Tour::query()
+            ->with('travel')
             ->whereRelation('travel', 'slug', $travelSlug);
 
         if (request()->has('priceFrom')) {
@@ -71,9 +70,6 @@ class TravelTourController extends Controller
         }
 
         // return
-        return response()->json(
-            $travelTours->paginate(),
-            Response::HTTP_OK
-        );
+        return new TourResourceCollection($travelTours->paginate());
     }
 }
