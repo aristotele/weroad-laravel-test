@@ -20,7 +20,7 @@ class TravelResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'numberOfDays' => $this->numberOfDays,
-            'moods' => json_decode($this->moods),
+            'moods' => $this->moods,
         ];
     }
 }
