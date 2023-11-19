@@ -24,7 +24,12 @@ Route::group([
     'prefix' => 'v1',
     'as' => 'api.v1.'
 ], function () {
+    // Public routes
     Route::get('/travels', [TravelController::class, 'index'])->name('travels.index');
-
     Route::get('/travels/{travelSlug}/tours', [TravelTourController::class, 'index'])->name('travels.tours.index');
+
+    // Private routes
+    Route::group(['middleware' => ['auth:sanctum']], function () {
+        Route::post('/travels', [TravelController::class, 'store'])->name('travels.store');
+    });
 });
