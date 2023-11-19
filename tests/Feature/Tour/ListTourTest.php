@@ -16,10 +16,10 @@ test('it returns a list of tours for the given travel', function () {
         ->count(4)
         ->state(
             new Sequence(
-                ['price' => 200000, 'startingDate' => now()->addDays(10), 'endingDate' => now()->addDays(10 + $travel->numberOfDays),],
-                ['price' => 100000, 'startingDate' => now()->addDays(20), 'endingDate' => now()->addDays(20 + $travel->numberOfDays),],
-                ['price' => 150000, 'startingDate' => now()->addDays(30), 'endingDate' => now()->addDays(30 + $travel->numberOfDays),],
-                ['price' => 120000, 'startingDate' => now()->addDays(40), 'endingDate' => now()->addDays(40 + $travel->numberOfDays),],
+                ['price' => 200000, 'startingDate' => now()->addDays(10), 'endingDate' => now()->addDays(10 + $travel->numberOfDays)],
+                ['price' => 100000, 'startingDate' => now()->addDays(20), 'endingDate' => now()->addDays(20 + $travel->numberOfDays)],
+                ['price' => 150000, 'startingDate' => now()->addDays(30), 'endingDate' => now()->addDays(30 + $travel->numberOfDays)],
+                ['price' => 120000, 'startingDate' => now()->addDays(40), 'endingDate' => now()->addDays(40 + $travel->numberOfDays)],
             )
         )
         ->create();
@@ -40,16 +40,15 @@ test('it returns a list of tours for the given travel', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    "id",
-                    "travel",
-                    "name",
-                    "startingDate",
-                    "endingDate",
-                    "price",
-                ]
-            ]
+                    'id',
+                    'travel',
+                    'name',
+                    'startingDate',
+                    'endingDate',
+                    'price',
+                ],
+            ],
         ]);
-
 
     $data = $response->json('data');
 
@@ -60,7 +59,6 @@ test('it returns a list of tours for the given travel', function () {
     );
 });
 
-
 test('it can filters tour related to a travel based on price criteria', function ($queryString, $matchingPrices) {
     // Given a Travel w/ some Tours associated
     $travel = Travel::factory()->create();
@@ -70,10 +68,10 @@ test('it can filters tour related to a travel based on price criteria', function
         ->count(4)
         ->state(
             new Sequence(
-                ['price' => 200000, 'startingDate' => now()->addDays(10), 'endingDate' => now()->addDays(10 + $travel->numberOfDays),],
-                ['price' => 100000, 'startingDate' => now()->addDays(20), 'endingDate' => now()->addDays(20 + $travel->numberOfDays),],
-                ['price' => 150000, 'startingDate' => now()->addDays(30), 'endingDate' => now()->addDays(30 + $travel->numberOfDays),],
-                ['price' => 120000, 'startingDate' => now()->addDays(40), 'endingDate' => now()->addDays(40 + $travel->numberOfDays),],
+                ['price' => 200000, 'startingDate' => now()->addDays(10), 'endingDate' => now()->addDays(10 + $travel->numberOfDays)],
+                ['price' => 100000, 'startingDate' => now()->addDays(20), 'endingDate' => now()->addDays(20 + $travel->numberOfDays)],
+                ['price' => 150000, 'startingDate' => now()->addDays(30), 'endingDate' => now()->addDays(30 + $travel->numberOfDays)],
+                ['price' => 120000, 'startingDate' => now()->addDays(40), 'endingDate' => now()->addDays(40 + $travel->numberOfDays)],
             )
         )
         ->create();
@@ -99,20 +97,20 @@ test('it can filters tour related to a travel based on price criteria', function
         'queryString' => [
             'priceFrom' => 150000,
         ],
-        'matchingPrices' => [150000, 200000]
+        'matchingPrices' => [150000, 200000],
     ],
     'priceTo' => [
         'queryString' => [
             'priceTo' => 150000,
         ],
-        'matchingPrices' => [100000, 120000, 150000]
+        'matchingPrices' => [100000, 120000, 150000],
     ],
     'priceFrom and priceTo' => [
         'queryString' => [
             'priceFrom' => 120000,
             'priceTo' => 150000,
         ],
-        'matchingPrices' => [120000, 150000]
+        'matchingPrices' => [120000, 150000],
     ],
 ]);
 
@@ -156,7 +154,7 @@ test('it can filters tour related to a travel based on date criteria', function 
 })->with([
     'dateFrom' => [
         'queryString' => [
-            'dateFrom' => '2024-01-01'
+            'dateFrom' => '2024-01-01',
         ],
         'matchingStartingDates' => [
             '2024-01-18', '2024-01-28', '2024-02-10',
@@ -164,7 +162,7 @@ test('it can filters tour related to a travel based on date criteria', function 
     ],
     'dateTo' => [
         'queryString' => [
-            'dateTo' => '2023-12-01'
+            'dateTo' => '2023-12-01',
         ],
         'matchingStartingDates' => [
             '2023-11-26',

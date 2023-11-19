@@ -11,6 +11,7 @@ class Role extends Model
     use HasFactory;
 
     public const ADMIN = 'ADMIN';
+
     public const EDITOR = 'EDITOR';
 
     public function users(): BelongsToMany

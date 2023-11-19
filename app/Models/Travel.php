@@ -28,7 +28,6 @@ class Travel extends Model
         return $this->hasMany(Tour::class, 'travelId', 'id');
     }
 
-
     /* -------------------------------------------------------------------------- */
     /*                                Query Scopes                                */
     /* -------------------------------------------------------------------------- */
@@ -36,7 +35,6 @@ class Travel extends Model
     {
         return $query->where('isPublic', true);
     }
-
 
     /* -------------------------------------------------------------------------- */
     /*                                  Accessors                                 */

@@ -2,7 +2,6 @@
 
 use App\Models\Role;
 use App\Models\User;
-
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\assertDatabaseHas;

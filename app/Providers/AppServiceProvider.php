@@ -20,12 +20,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading(!app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
 
         if (env('DUMP_QUERY')) {
             \DB::listen(function ($query) {
                 $sql = \Illuminate\Support\Str::replaceArray('?', $query->bindings, $query->sql);
-                logger('sql: ' . var_export($sql, true));
+                logger('sql: '.var_export($sql, true));
                 // $query->sql;
                 // $query->bindings;
                 // $query->time;

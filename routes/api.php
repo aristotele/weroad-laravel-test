@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\V1\TravelController;
 use App\Http\Controllers\Api\V1\TravelTourController;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +23,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'v1',
-    'as' => 'api.v1.'
+    'as' => 'api.v1.',
 ], function () {
     // Public routes
     Route::get('/travels', [TravelController::class, 'index'])->name('travels.index');
     Route::get('/travels/{travelSlug}/tours', [TravelTourController::class, 'index'])->name('travels.tours.index');
 
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-
 
     // Private routes
     Route::group(['middleware' => ['auth:sanctum']], function () {

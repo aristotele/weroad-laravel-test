@@ -1,13 +1,12 @@
 <?php
 
 use App\Models\Role;
-use App\Models\User;
 use App\Models\Travel;
+use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\patchJson;
-use function Pest\Laravel\postJson;
 use function PHPUnit\Framework\assertCount;
 
 beforeEach(function () {
@@ -30,7 +29,7 @@ test('authorized users can update an existing travel', function ($roleName) {
         route('api.v1.travels.update', $travel),
         [
             'isPublic' => false,
-            "name" => "changed-name",
+            'name' => 'changed-name',
         ]
     )
         ->assertOk()
@@ -40,7 +39,7 @@ test('authorized users can update an existing travel', function ($roleName) {
             'name',
             'description',
             'numberOfDays',
-            'moods'
+            'moods',
         ]);
 
     assertCount(1, Travel::all());
@@ -48,7 +47,7 @@ test('authorized users can update an existing travel', function ($roleName) {
         'travels',
         [
             'isPublic' => 0,
-            "name" => "changed-name",
+            'name' => 'changed-name',
         ]
     );
 })->with([

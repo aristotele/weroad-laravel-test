@@ -28,17 +28,17 @@ test('authorized users can create new travels', function () {
         route('api.v1.travels.store'),
         [
             'isPublic' => true,
-            "slug" => "united-arab-emirates",
-            "name" => "United Arab Emirates => from Dubai to Abu Dhabi",
-            "description" => "At Dubai and Abu Dhabi",
-            "numberOfDays" => 7,
-            "moods" => [
-                "nature" => 30,
-                "relax" => 40,
-                "history" => 20,
-                "culture" => 80,
-                "party" => 70
-            ]
+            'slug' => 'united-arab-emirates',
+            'name' => 'United Arab Emirates => from Dubai to Abu Dhabi',
+            'description' => 'At Dubai and Abu Dhabi',
+            'numberOfDays' => 7,
+            'moods' => [
+                'nature' => 30,
+                'relax' => 40,
+                'history' => 20,
+                'culture' => 80,
+                'party' => 70,
+            ],
         ]
     )->assertCreated();
 
@@ -47,14 +47,13 @@ test('authorized users can create new travels', function () {
         'travels',
         [
             'isPublic' => 1,
-            "slug" => "united-arab-emirates",
-            "name" => "United Arab Emirates => from Dubai to Abu Dhabi",
-            "description" => "At Dubai and Abu Dhabi",
-            "numberOfDays" => 7,
+            'slug' => 'united-arab-emirates',
+            'name' => 'United Arab Emirates => from Dubai to Abu Dhabi',
+            'description' => 'At Dubai and Abu Dhabi',
+            'numberOfDays' => 7,
         ]
     );
 });
-
 
 test('unauthorized users cannot create new travels', function () {
     assertCount(0, Travel::all());

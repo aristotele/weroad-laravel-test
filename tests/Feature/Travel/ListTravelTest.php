@@ -26,14 +26,14 @@ test('it returns a list of public travels', function () {
         ->assertJsonStructure([
             'data' => [
                 '*' => [
-                    "id",
-                    "slug",
-                    "name",
-                    "description",
-                    "numberOfDays",
-                    "moods",
-                ]
-            ]
+                    'id',
+                    'slug',
+                    'name',
+                    'description',
+                    'numberOfDays',
+                    'moods',
+                ],
+            ],
         ]);
 
     $data = $response->json('data');

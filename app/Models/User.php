@@ -44,7 +44,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);
@@ -52,9 +51,6 @@ class User extends Authenticatable
 
     /**
      * Returns wether the user has the given role or not.
-     *
-     * @param string $roleName
-     * @return boolean
      */
     public function hasRole(string $roleName): bool
     {
