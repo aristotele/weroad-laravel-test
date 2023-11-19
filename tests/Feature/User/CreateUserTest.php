@@ -24,16 +24,14 @@ test('authorized users can create new users', function () {
     Sanctum::actingAs($this->admin);
 
     $response = postJson(
-        route(
-            'api.v1.users.store',
-            [
-                'email' => 'foo@mail.com',
-                'password' => 'password',
-                'roles' => [
-                    Role::ADMIN, Role::EDITOR,
-                ],
-            ]
-        )
+        route('api.v1.users.store'),
+        [
+            'email' => 'foo@mail.com',
+            'password' => 'password',
+            'roles' => [
+                Role::ADMIN, Role::EDITOR,
+            ],
+        ]
     )->assertCreated();
 
     assertCount(3, User::all());
@@ -53,10 +51,8 @@ test('unauthorized users cannot create new users', function () {
     Sanctum::actingAs($this->editor);
 
     $response = postJson(
-        route(
-            'api.v1.users.store',
-            []
-        )
+        route('api.v1.users.store'),
+        []
     )->assertForbidden();
 
     assertCount(2, User::all());

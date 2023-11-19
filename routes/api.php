@@ -35,6 +35,8 @@ Route::group([
     // Private routes
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/travels', [TravelController::class, 'store'])->name('travels.store');
+        Route::patch('/travels/{travel}', [TravelController::class, 'update'])->name('travels.update');
+
         Route::post('/travels/{travelId}/tours', [TravelTourController::class, 'store'])->name('travels.tours.store');
 
         Route::post('/users', [UserController::class, 'store'])->name('users.store');

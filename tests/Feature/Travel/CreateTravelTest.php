@@ -25,23 +25,21 @@ test('authorized users can create new travels', function () {
     );
 
     $response = postJson(
-        route(
-            'api.v1.travels.store',
-            [
-                'isPublic' => true,
-                "slug" => "united-arab-emirates",
-                "name" => "United Arab Emirates => from Dubai to Abu Dhabi",
-                "description" => "At Dubai and Abu Dhabi",
-                "numberOfDays" => 7,
-                "moods" => [
-                    "nature" => 30,
-                    "relax" => 40,
-                    "history" => 20,
-                    "culture" => 80,
-                    "party" => 70
-                ]
+        route('api.v1.travels.store'),
+        [
+            'isPublic' => true,
+            "slug" => "united-arab-emirates",
+            "name" => "United Arab Emirates => from Dubai to Abu Dhabi",
+            "description" => "At Dubai and Abu Dhabi",
+            "numberOfDays" => 7,
+            "moods" => [
+                "nature" => 30,
+                "relax" => 40,
+                "history" => 20,
+                "culture" => 80,
+                "party" => 70
             ]
-        )
+        ]
     )->assertCreated();
 
     assertCount(1, Travel::all());
@@ -66,10 +64,8 @@ test('unauthorized users cannot create new travels', function () {
     );
 
     $response = postJson(
-        route(
-            'api.v1.travels.store',
-            []
-        )
+        route('api.v1.travels.store'),
+        []
     )->assertForbidden();
 
     assertCount(0, Travel::all());

@@ -37,7 +37,7 @@ class TravelPolicy
      */
     public function update(User $user, Travel $travel): bool
     {
-        return false;
+        return $user->hasRole(Role::ADMIN) || $user->hasRole(Role::EDITOR);
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Http\Resources\TravelResourceCollection;
 use App\Models\Travel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 
 class TravelController extends Controller
 {
@@ -68,7 +69,35 @@ class TravelController extends Controller
      */
     public function update(Request $request, Travel $travel)
     {
-        //
+        // authorize
+        if ($request->user()->cannot('update', $travel)) {
+            return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+        }
+
+        // validate
+        // could be also a PUT with required fields
+        $validated = $request->validate([
+            'isPublic' => ['boolean'],
+            'slug' => ['string', 'max:255', Rule::unique('travels', 'slug')->ignoreModel($travel, 'slug')], // could be suggested by front-end, so it can also be tweaked
+            'name' => ['string', 'max:255'],
+            'description' => ['string', 'max:65535'],
+            'numberOfDays' => ['integer'],
+            'moods.nature' => ['integer'],
+            'moods.relax' => ['integer'],
+            'moods.history' => ['integer'],
+            'moods.culture' => ['integer'],
+            'moods.party' => ['integer'],
+        ]);
+
+        // save
+        // some updates could maybe affect related tours (name, numberOfDays)
+        $travel->update($validated);
+
+        // response
+        return response()->json(
+            new TravelResource($travel),
+            Response::HTTP_OK,
+        );
     }
 
     /**
